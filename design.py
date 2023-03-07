@@ -1,4 +1,4 @@
-# Form implementation generated from reading ui file '/Users/Wolfram_3387/PycharmProjects/TicTacToeTim/design.ui'
+# Form implementation generated from reading ui file 'C:\Users\wolfr\PycharmProjects\MyTicTacToe\design.ui'
 #
 # Created by: PyQt6 UI code generator 6.4.2
 #
@@ -13,7 +13,11 @@ class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
         MainWindow.resize(750, 750)
+        icon = QtGui.QIcon()
+        icon.addPixmap(QtGui.QPixmap('resourses/images/tic-tac-toe-hand-drawn-game.png'), QtGui.QIcon.Mode.Normal, QtGui.QIcon.State.Off)
+        MainWindow.setWindowIcon(icon)
         MainWindow.setStyleSheet("background-color: rgb(84, 84, 84)")
+        MainWindow.setIconSize(QtCore.QSize(512, 512))
         self.centralwidget = QtWidgets.QWidget(parent=MainWindow)
         self.centralwidget.setObjectName("centralwidget")
         self.verticalLayout = QtWidgets.QVBoxLayout(self.centralwidget)
@@ -129,6 +133,6 @@ class Ui_MainWindow(object):
 
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
-        MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
+        MainWindow.setWindowTitle(_translate("MainWindow", "Кресты и нули"))
         self.label.setText(_translate("MainWindow", "TextLabel"))
         self.pushButton_start.setText(_translate("MainWindow", "Начать игру"))

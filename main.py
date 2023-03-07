@@ -141,7 +141,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
             self.all_buttons[i].setStyleSheet(self.empty_cell_css)
 
     def get_winning_move(self, item):
-        """Возвращает индекс победного хода для игрока, котоорый играет за item"""
+        """Возвращает индекс победного хода для игрока, играющего за item"""
         matrix = [
             [self.board[0], self.board[1], self.board[2]],
             [self.board[3], self.board[4], self.board[5]],
@@ -150,23 +150,19 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         # Проверка по строкам
         for i in range(3):
             if matrix[i].count(item) == 2 and matrix[i].count(self.empty_item) == 1:
-                print(i * 3 + matrix[i].index(self.empty_item))
                 return i * 3 + matrix[i].index(self.empty_item)
         # Проверка по столбцам
         for i in range(3):
             column = [matrix[j][i] for j in range(3)]
             if column.count(item) == 2 and column.count(self.empty_item) == 1:
-                print(column.index(self.empty_item) * 3 + i)
                 return column.index(self.empty_item) * 3 + i
         # Проверка по главной диагонали
         main_diagonal = [matrix[i][i] for i in range(3)]
         if main_diagonal.count(item) == 2 and main_diagonal.count(self.empty_item) == 1:
-            print(main_diagonal.index(self.empty_item) * 4)
             return main_diagonal.index(self.empty_item) * 4
         # Проверка по побочной диагонали
         secondary_diagonal = [matrix[i][2 - i] for i in range(3)]
         if secondary_diagonal.count(item) == 2 and secondary_diagonal.count(self.empty_item) == 1:
-            print(secondary_diagonal.index(self.empty_item) * 2 + 2)
             return secondary_diagonal.index(self.empty_item) * 2 + 2
 
     def get_winning_indices(self):
@@ -189,13 +185,15 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
 
     def check_state(self):
         """Проверяет состояние игры"""
-        if self.is_win() or self.is_lose():
-            if self.is_win():
+        is_win = self.is_win(self.player_item)
+        is_lose = self.is_win(self.computer_item)
+        if is_win or is_lose:
+            if is_win:
                 icon = self.cross_win_css
                 self.label.setText('Победа!')
                 self.label.setStyleSheet(self.green_css)
                 self.pushButton_start.setStyleSheet(self.green_css)
-            elif self.is_lose():
+            elif is_lose:
                 icon = self.zero_lose_css
                 self.label.setText('Поражение!')
                 self.label.setStyleSheet(self.red_css)
@@ -212,16 +210,16 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
             self.pushButton_start.setText('Перезапустить игру')
             self.pushButton_start.setStyleSheet(self.default_color)
 
-    def is_win(self):
+    def is_win(self, item):
+        """Проверяет, победил ли игрок, играющий за item"""
         winning_indices = self.get_winning_indices()
-        return winning_indices is not None and self.board[winning_indices[0]] == self.player_item
-
-    def is_lose(self):
-        winning_indices = self.get_winning_indices()
-        return winning_indices is not None and self.board[winning_indices[0]] == self.computer_item
+        return winning_indices is not None and self.board[winning_indices[0]] == item
 
     def is_draw(self):
-        return self.empty_item not in self.board and not self.is_win() and not self.is_lose()
+        """Проверяет, настала ли ничья"""
+        return (self.empty_item not in self.board and
+                not self.is_win(self.player_item) and
+                not self.is_win(self.computer_item))
 
 
 if __name__ == '__main__':
